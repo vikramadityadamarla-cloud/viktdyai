@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>VIKTDYAI</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;800&display=swap');
+
+    body {
+      margin: 0;
+      font-family: 'Orbitron', sans-serif;
+      background: radial-gradient(circle, #050505, #000000);
+      overflow-x: hidden;
+      color: #fff;
+      animation: bgPulse 6s infinite alternate;
+    }
+
+    @keyframes bgPulse {
+      from { filter: brightness(1); }
+      to { filter: brightness(1.4); }
+    }
+
+    /* FIRE BACKGROUND */
+    .fire-bg {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: url('https://i.imgur.com/k4dFJwC.gif');
+      background-size: cover;
+      opacity: 0.25;
+      z-index: -1;
+      mix-blend-mode: screen;
+      animation: fireFlash 3s infinite alternate;
+    }
+
+    @keyframes fireFlash {
+      0% { opacity: 0.15; }
+      100% { opacity: 0.35; }
+    }
+
+    /* LOGO + TITLE */
+    .logo-wrapper {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-top: 20px;
+      gap: 16px;
+    }
+
+    .logo-ring {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      border: 4px solid #ff6600;
+      box-shadow: 0 0 20px #ff6600, 0 0 35px #ff0000 inset;
+      position: relative;
+      animation: spinRing 4s linear infinite;
+    }
+
+    .logo-orb {
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: #ffd966;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform-origin: -22px -22px;
+      animation: orbit 1.6s linear infinite;
+    }
+
+    @keyframes spinRing {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    @keyframes orbit {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 3rem;
+      text-shadow: 0 0 25px #ff4500;
+      animation: glowPulse 2.5s infinite;
+    }
+
+    @keyframes glowPulse {
+      0% { text-shadow: 0 0 15px #ff4500; }
+      100% { text-shadow: 0 0 35px #ff0000; }
+    }
+
+    .tagline {
+      text-align: center;
+      margin-top: 4px;
+      font-size: 0.9rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: #ffdd99;
+    }
+
+    /* GLOWING BUTTONS */
+    .glow-btn {
+      padding: 12px 22px;
+      margin: 10px;
+      background: rgba(20, 20, 20, 0.85);
+      border: 2px solid #ff6600;
+      color: white;
+      border-radius: 10px;
+      cursor: pointer;
+      text-shadow: 0 0 10px #ff6600;
+      box-shadow: 0 0 20px #ff6600;
+      transition: 0.2s;
+      font-size: 1rem;
+    }
+    .glow-btn:hover {
+      box-shadow: 0 0 35px #ff3300;
+      transform: scale(1.08) translateY(-2px);
+    }
+
+    .top-controls {
+      text-align: center;
+      margin-top: 14px;
+    }
+
+    /* GAME HUB / ARCADE */
+    #game-hub {
+      margin: 20px;
+      padding: 18px;
+      background: rgba(0,0,0,0.55);
+      border: 2px solid #ff6600;
+      border-radius: 12px;
+      box-shadow: 0 0 20px #ff6600;
+      animation: fadeIn 1s;
+    }
+
+    #game-hub h2 {
+      margin-top: 0;
+      text-shadow: 0 0 15px #ff5500;
+    }
+
+    #game-buttons {
+      margin-bottom: 10px;
+    }
+
+    #gameCanvas {
+      background: #050505;
+      border-radius: 10px;
+      border: 2px solid #ff6600;
+      box-shadow: 0 0 20px #ff6600;
+      display: block;
+    }
+
+    #gameStatus {
+      margin-top: 8px;
+      font-size: 0.9rem;
+      color: #ffdd99;
+    }
+
+    /* CHATBOT */
+    #chat-box {
+      width: 360px;
+      height: 480px;
+      background: rgba(0,0,0,0.82);
+      border: 2px solid #ff3300;
+      border-radius: 10px;
+      padding: 10px;
+      overflow-y: auto;
+      position: fixed;
+      right: 20px;
+      bottom: 60px;
+      box-shadow: 0 0 35px #ff3300;
+      animation: slideUp 0.5s;
+      font-size: 0.9rem;
+    }
+
+    @keyframes slideUp {
+      from { transform: translateY(40px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    #chat-input {
+      width: 360px;
+      padding: 10px;
+      background: #222;
+      border: 1px solid #ff3300;
+      border-radius: 6px;
+      color: white;
+      position: fixed;
+      right: 20px;
+      bottom: 20px;
+      font-size: 0.9rem;
+    }
+
+    .chat-msg-user {
+      margin: 4px 0;
+    }
+
+    .chat-msg-bot {
+      margin: 4px 0;
+      color: #ffdd99;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    /* FAVORITES */
+    #favorites {
+      margin: 20px;
+      padding: 14px;
+      background: rgba(0,0,0,0.4);
+      border-radius: 10px;
+      border: 1px solid #ff6600;
+    }
+
+    #favorites a {
+      display: inline-block;
+      margin: 4px 6px;
+      padding: 6px 10px;
+      color: #ffcc66;
+      text-decoration: none;
+      font-size: 0.95rem;
+      text-shadow: 0 0 6px #ff4500;
+      border-radius: 8px;
+      background: rgba(255, 80, 0, 0.2);
+      transition: 0.25s;
+    }
+    #favorites a:hover {
+      color: #ffffff;
+      background: #ff6600;
+      transform: translateY(-2px);
+    }
+
+    @media (max-width: 768px) {
+      #chat-box,
+      #chat-input {
+        right: 10px;
+        width: calc(100% - 20px);
+      }
+      #gameCanvas {
+        width: 100%;
+        height: auto;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<div class="fire-bg"></div>
+
+<div class="logo-wrapper">
+  <div class="logo-ring">
+    <div class="logo-orb"></div>
+  </div>
+  <div>
+    <h1>VIKTDYAI</h1>
+    <div class="tagline">Homework • Games • Fire Mode</div>
+  </div>
+</div>
+
+<div class="top-controls">
+  <button class="glow-btn" onclick="playClick(); toggleChat()">🤖 Open AI Tutor</button>
+  <button class="glow-btn" onclick="playClick(); addGame()">➕ Add Game Link</button>
+  <button class="glow-btn" onclick="playClick(); focusArcade()">🕹️ Go to Arcade</button>
+</div>
+
+<!-- FAVORITE GAME LINKS -->
+<div id="favorites">
+  <h2 style="margin-top:0; text-shadow:0 0 10px #ff4500;">⭐ Favorite Game Links</h2>
+</div>
+
+<!-- GAME HUB / ARCADE -->
+<div id="game-hub">
+  <h2>🕹️ VIKTDYAI Arcade</h2>
+  <p style="font-size:0.9rem; color:#ffddaa;">Arrow keys / spacebar controls are shown under each game. Pick a game and cook.</p>
+
+  <div id="game-buttons">
+    <button class="glow-btn" onclick="playClick(); startSnake()">🐍 Snake</button>
+    <button class="glow-btn" onclick="playClick(); startPong()">🏓 Pong</button>
+    <button class="glow-btn" onclick="playClick(); startFlappy()">🐤 Flappy VIK</button>
+  </div>
+
+  <canvas id="gameCanvas" width="480" height="320"></canvas>
+  <p id="gameStatus"></p>
+</div>
+
+<!-- CHATBOT WINDOW -->
+<div id="chat-box" style="display:none;"></div>
+<input id="chat-input" style="display:none;" placeholder="Ask VIKTDYAI anything (e.g. 'explain fractions', 'history of Rome')" onkeydown="sendMessage(event)" />
+
+<script>
+  // Simple click sound (you can replace with your own .mp3 URL)
+  const clickSound = new Audio('https://actions.google.com/sounds/v1/cartoon/wood_plank_flicks.ogg');
+  function playClick() {
+    try {
+      clickSound.currentTime = 0;
+      clickSound.play();
+    } catch (e) {
+      // ignore autoplay errors
+    }
+  }
+
+  const chatBox = document.getElementById('chat-box');
+  const inputBox = document.getElementById('chat-input');
+
+  function toggleChat() {
+    const isHidden = chatBox.style.display === 'none';
+    chatBox.style.display = isHidden ? 'block' : 'none';
+    inputBox.style.display = isHidden ? 'block' : 'none';
+
+    if (isHidden && chatBox.innerHTML.trim() === '') {
+      chatBox.innerHTML += "<div class='chat-msg-bot'><strong>VIKTDYAI:</strong> Yo! I'm your homework AI. Tell me the subject and what you are stuck on.</div>";
+    }
+  }
+
+  function getAIResponse(message) {
+    const msg = message.toLowerCase();
+
+    if (msg.includes('math') || msg.match(/fraction|algebra|equation|percent/)) {
+      return "For math: break the problem into tiny steps. 1) Write what you know. 2) Write what you need to find. 3) Build an equation that connects them. If you paste the exact problem, I can walk step-by-step.";
+    }
+
+    if (msg.includes('science') || msg.match(/biology|physics|chemistry|cell|atom/)) {
+      return "Science hack: use this pattern – definition, example, and why it matters in real life. Tell me the topic (like cells, forces, atoms) and I’ll give you all three.";
+    }
+
+    if (msg.includes('history') || msg.match(/war|revolution|empire|rome|greek|medieval/)) {
+      return "For history: remember 3 things – WHEN it happened, WHO was involved, and WHY it mattered. Ask me about any event and I’ll break it into those three pieces.";
+    }
+
+    if (msg.includes('essay') || msg.includes('write') || msg.includes('paragraph')) {
+      return "Essay structure cheat code: 1) Hook, 2) Main idea, 3) 2–3 reasons with examples, 4) Mic-drop conclusion. Tell me your topic and I’ll help you build the outline.";
+    }
+
+    if (msg.includes('vocabulary') || msg.includes('word')) {
+      return "Drop the word and I’ll give: definition, part of speech, and an example sentence that actually sounds normal.";
+    }
+
+    if (msg.includes('hello') || msg.includes('hi') || msg.includes('hey')) {
+      return "Hey! I’m VIKTDYAI 🔥. Ask me anything about homework or play a game in the arcade while you think.";
+    }
+
+    // Default generic helper
+    return "Nice question! Try telling me the subject (math, science, history, writing, vocab), the grade level, and the exact thing you want: explanation, step-by-step solution, or practice idea. I’ll format the answer in that style.";
+  }
+
+  function sendMessage(e) {
+    if (e.key === 'Enter') {
+      const msg = inputBox.value;
+      if (!msg.trim()) return;
+
+      chatBox.innerHTML += `<div class='chat-msg-user'><strong>You:</strong> ${msg}</div>`;
+      inputBox.value = '';
+
+      setTimeout(() => {
+        const botReply = getAIResponse(msg);
+        chatBox.innerHTML += `<div class='chat-msg-bot'><strong>VIKTDYAI:</strong> ${botReply}</div>`;
+        chatBox.scrollTop = chatBox.scrollHeight;
+      }, 250);
+    }
+  }
+
+  function addGame() {
+    const link = prompt("Paste the game link:");
+    if (link) {
+      const fav = document.getElementById('favorites');
+      fav.innerHTML += `<a href='${link}' target='_blank'>🎮 ${link}</a>`;
+    }
+  }
+
+  function focusArcade() {
+    const hub = document.getElementById('game-hub');
+    hub.scrollIntoView({ behavior: 'smooth' });
+  }
+
+  // =====================
+  //   ARCADE GAMES
+  // =====================
+  const canvas = document.getElementById('gameCanvas');
+  const ctx = canvas.getContext('2d');
+  const statusText = document.getElementById('gameStatus');
+
+  let currentGame = null;
+  let gameLoopId = null;
+  let keyHandler = null;
+
+  function clearGame() {
+    if (gameLoopId) cancelAnimationFrame(gameLoopId);
+    if (keyHandler) window.removeEventListener('keydown', keyHandler);
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+  }
+
+  // ----- SNAKE -----
+  function startSnake() {
+    clearGame();
+    currentGame = 'snake';
+    statusText.textContent = 'SNAKE: Use arrow keys. Don\'t bonk the walls or yourself.';
+
+    const gridSize = 16;
+    let snake = [{ x: 10, y: 10 }];
+    let vx = 1, vy = 0;
+    let apple = { x: 15, y: 10 };
+    let speed = 120;
+    let lastTime = 0;
+
+    keyHandler = function (e) {
+      if (currentGame !== 'snake') return;
+      switch (e.key) {
+        case 'ArrowUp': if (vy === 0) { vx = 0; vy = -1; } break;
+        case 'ArrowDown': if (vy === 0) { vx = 0; vy = 1; } break;
+        case 'ArrowLeft': if (vx === 0) { vx = -1; vy = 0; } break;
+        case 'ArrowRight': if (vx === 0) { vx = 1; vy = 0; } break;
+      }
+    };
+    window.addEventListener('keydown', keyHandler);
+
+    function placeApple() {
+      apple.x = Math.floor(Math.random() * (canvas.width / gridSize));
+      apple.y = Math.floor(Math.random() * (canvas.height / gridSize));
+    }
+
+    function loop(timestamp) {
+      gameLoopId = requestAnimationFrame(loop);
+      if (timestamp - lastTime < speed) return;
+      lastTime = timestamp;
+
+      const head = { x: snake[0].x + vx, y: snake[0].y + vy };
+
+      if (head.x < 0 || head.y < 0 || head.x >= canvas.width / gridSize || head.y >= canvas.height / gridSize) {
+        statusText.textContent = 'Game over! Press Snake again to restart.';
+        clearGame();
+        return;
+      }
+
+      for (let segment of snake) {
+        if (segment.x === head.x && segment.y === head.y) {
+          statusText.textContent = 'You ate yourself 💀 Press Snake to retry.';
+          clearGame();
+          return;
+        }
+      }
+
+      snake.unshift(head);
+
+      if (head.x === apple.x && head.y === apple.y) {
+        playClick();
+        placeApple();
+      } else {
+        snake.pop();
+      }
+
+      ctx.fillStyle = '#050505';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      ctx.fillStyle = '#ff0000';
+      ctx.fillRect(apple.x * gridSize, apple.y * gridSize, gridSize, gridSize);
+
+      ctx.fillStyle = '#00ff66';
+      snake.forEach((s, index) => {
+        ctx.fillRect(s.x * gridSize, s.y * gridSize, gridSize - 1, gridSize - 1);
+      });
+    }
+
+    loop(0);
+  }
+
+  // ----- PONG -----
+  function startPong() {
+    clearGame();
+    currentGame = 'pong';
+    statusText.textContent = 'PONG: Use Up/Down arrows to move your paddle.';
+
+    let paddleHeight = 60;
+    let paddleY = canvas.height / 2 - paddleHeight / 2;
+    let aiPaddleY = paddleY;
+    let ballX = canvas.width / 2;
+    let ballY = canvas.height / 2;
+    let ballVX = 4;
+    let ballVY = 3;
+
+    keyHandler = function (e) {
+      if (currentGame !== 'pong') return;
+      if (e.key === 'ArrowUp') paddleY -= 20;
+      if (e.key === 'ArrowDown') paddleY += 20;
+      paddleY = Math.max(0, Math.min(canvas.height - paddleHeight, paddleY));
+    };
+    window.addEventListener('keydown', keyHandler);
+
+    function loop() {
+      gameLoopId = requestAnimationFrame(loop);
+
+      ctx.fillStyle = '#050505';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      ballX += ballVX;
+      ballY += ballVY;
+
+      if (ballY < 0 || ballY > canvas.height) ballVY *= -1;
+
+      aiPaddleY += (ballY - (aiPaddleY + paddleHeight / 2)) * 0.08;
+
+      // Player paddle
+      ctx.fillStyle = '#00ccff';
+      ctx.fillRect(10, paddleY, 8, paddleHeight);
+
+      // AI paddle
+      ctx.fillStyle = '#ff66ff';
+      ctx.fillRect(canvas.width - 18, aiPaddleY, 8, paddleHeight);
+
+      // Ball
+      ctx.fillStyle = '#ffffff';
+      ctx.beginPath();
+      ctx.arc(ballX, ballY, 6, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Collision player paddle
+      if (ballX < 20 && ballY > paddleY && ballY < paddleY + paddleHeight) {
+        ballVX = Math.abs(ballVX);
+        playClick();
+      }
+
+      // Collision AI paddle
+      if (ballX > canvas.width - 20 && ballY > aiPaddleY && ballY < aiPaddleY + paddleHeight) {
+        ballVX = -Math.abs(ballVX);
+      }
+
+      if (ballX < 0 || ballX > canvas.width) {
+        statusText.textContent = 'Point scored! Press Pong again to restart.';
+        clearGame();
+      }
+    }
+
+    loop();
+  }
+
+  // ----- FLAPPY BIRD STYLE -----
+  function startFlappy() {
+    clearGame();
+    currentGame = 'flappy';
+    statusText.textContent = 'FLAPPY: Press Space to flap through gaps.';
+
+    let birdY = canvas.height / 2;
+    let birdVY = 0;
+    const gravity = 0.4;
+    const flapStrength = -7;
+
+    let pipes = [];
+    let frame = 0;
+
+    function addPipe() {
+      const gap = 80;
+      const minHeight = 40;
+      const maxHeight = canvas.height - gap - minHeight;
+      const topHeight = Math.floor(Math.random() * maxHeight) + minHeight;
+      pipes.push({ x: canvas.width, top: topHeight, gap });
+    }
+
+    keyHandler = function (e) {
+      if (currentGame !== 'flappy') return;
+      if (e.code === 'Space') {
+        birdVY = flapStrength;
+        playClick();
+      }
+    };
+    window.addEventListener('keydown', keyHandler);
+
+    function loop() {
+      gameLoopId = requestAnimationFrame(loop);
+      frame++;
+
+      ctx.fillStyle = '#050505';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      if (frame % 110 === 0) addPipe();
+
+      birdVY += gravity;
+      birdY += birdVY;
+
+      ctx.fillStyle = '#ffff00';
+      ctx.beginPath();
+      ctx.arc(80, birdY, 10, 0, Math.PI * 2);
+      ctx.fill();
+
+      for (let i = pipes.length - 1; i >= 0; i--) {
+        const p = pipes[i];
+        p.x -= 2.5;
+
+        ctx.fillStyle = '#00ff66';
+        ctx.fillRect(p.x, 0, 40, p.top);
+        ctx.fillRect(p.x, p.top + p.gap, 40, canvas.height - (p.top + p.gap));
+
+        if (p.x + 40 < 0) pipes.splice(i, 1);
+
+        if (80 + 10 > p.x && 80 - 10 < p.x + 40) {
+          if (birdY - 10 < p.top || birdY + 10 > p.top + p.gap) {
+            statusText.textContent = 'You crashed 💥 Press Flappy VIK to try again.';
+            clearGame();
+          }
+        }
+      }
+
+      if (birdY + 10 > canvas.height || birdY - 10 < 0) {
+        statusText.textContent = 'You fell 💀 Press Flappy VIK to restart.';
+        clearGame();
+      }
+    }
+
+    loop();
+  }
+</script>
+
+</body>
+</html>
